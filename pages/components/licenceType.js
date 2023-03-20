@@ -1,6 +1,17 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 
 const licenceType = () => {
+    const [Licence, SetLicence] = useState([]);
+
+    const GetLicence = async () => {
+        const { data } = await axios.get("https://103.12.1.103/AbsiQuotingAPI/Master/GetLicenceTypeMaster")
+        SetLicence(data)
+    }
+
+    useEffect(() => {
+        GetLicence()
+    }, [])
     return (
         <div className="container-fluid">
             <div className="row">
@@ -34,6 +45,30 @@ const licenceType = () => {
                     </div>
                 </div>
             </div>
+
+            <table className='table table-hover mt-4 shadow-lg rounded-4'>
+                <thead className="table-info text-secondary">
+                    <tr>
+                        <th>Licence Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        Licence.map((info) => {
+                            return (
+                                <tr key={info.id}>
+                                    <td>{info.licenceType}</td>
+                                    <td>
+                                        <button className="btn btn-light btn-sm text-primary border-primary">Edit</button>
+                                        <button className="btn btn-light btn-sm text-primary border-primary">Delete</button>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
         </div>
     )
 }

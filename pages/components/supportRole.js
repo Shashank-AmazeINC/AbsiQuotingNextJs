@@ -1,6 +1,21 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
+
+
 
 const supportRole = () => {
+    const [Support, setSupport] = useState([]);
+
+    const getSupport = async () => {
+        const { data } = await axios.get("https://103.12.1.103/AbsiQuotingAPI/Master/GetSupportRoleMaster")
+        setSupport(data)
+    }
+
+
+
+    useState(() => {
+        getSupport()
+    }, [])
     return (
         <div className="container-fluid">
             <div className="row">
@@ -34,6 +49,30 @@ const supportRole = () => {
                     </div>
                 </div>
             </div>
+
+            <table className='table table table-hover mt-4 shadow-lg rounded-4'>
+                <thead className="table-info text-secondary">
+                    <tr>
+                        <th>Support Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        Support.map((info) => {
+                            return (
+                                <tr key={info.id}>
+                                    <td>{info.supportRole}</td>
+                                    <td>
+                                        <button className="btn btn-light btn-sm text-primary border-primary">Edit</button>
+                                        <button className="btn btn-light btn-sm text-primary border-primary">Delete</button>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+            </table>
         </div>
     )
 }
